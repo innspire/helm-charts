@@ -37,4 +37,6 @@ innspireWebsite:
   nodeSelector: {}
   affinity: {}
   tolerations: []
+  probes:
+    enabled: true
   logLevel: "Information"
