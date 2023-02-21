@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "innspire.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "innspireWebsite"
+    app.kubernetes.io/component: "innspirewebsite"
 spec:
   {{- if not .Values.innspireWebsite.autoscaling.enabled }}
   replicas: {{ .Values.innspireWebsite.replicaCount }}
@@ -14,12 +14,12 @@ spec:
   selector:
     matchLabels:
       {{- include "innspire.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: "innspireWebsite"
+      app.kubernetes.io/component: "innspirewebsite"
   template:
     metadata:
       labels:
         {{- include "innspire.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: "innspireWebsite"
+        app.kubernetes.io/component: "innspirewebsite"
     spec:
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
@@ -28,7 +28,7 @@ spec:
       securityContext:
         {{- toYaml .Values.global.podSecurityContext | nindent 8 }}
       containers:
-        - name: innspireWebsite
+        - name: innspirewebsite
           securityContext:
             {{- toYaml .Values.global.securityContext | nindent 12 }}
           image: "{{ .Values.innspireWebsite.image.repository }}:{{ .Values.innspireWebsite.image.tag | default .Chart.AppVersion }}"
@@ -72,7 +72,7 @@ spec:
                   key: API_URL
             - name: API_SECRET
               valueFrom:
-                secretMapKeyRef:
+                secretKeyRef:
                   name: {{ include "innspire.fullname" . }}-innspire-api-secret
                   key: API_SECRET
       {{- with .Values.innspireWebsite.nodeSelector }}
