@@ -18,7 +18,7 @@ spec:
             service:
               name: {{ $fullName }}-innspirewebsite
               port:
-                number: 8080
+                number: 80
           path: /
           pathType: Prefix
     {{- end }}
