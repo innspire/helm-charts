@@ -8,4 +8,4 @@ metadata:
     app.kubernetes.io/component: "innspirewebsite"
 data:
   LOGLEVEL: {{ .Values.innspireWebsite.logLevel }}
-  API_URL: http://{{ include "innspire.fullname" . }}-innspirewebapi:8080
+  API_URL: http://{{ include "innspire.fullname" . }}-innspirewebapi:80
