@@ -1,0 +1,11 @@
+apiVersion: v2
+name: innspire #TODO
+version: 0.1.0
+description: Helm Chart for the Innspire Stack
+type: application
+dependencies: []
+#- name: mariadb
+#  version: 11.4.5
+#  repository: https://charts.bitnami.com/bitnami
+#  condition: mariadb.managed
+appVersion: "0.0.0"

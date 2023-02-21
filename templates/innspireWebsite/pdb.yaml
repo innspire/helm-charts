@@ -1,0 +1,21 @@
+{{- if .Values.innspireWebsite.pdb.create }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspirewebsite
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspirewebsite"
+spec:
+  {{- if .Values.innspireWebsite.pdb.minAvailable }}
+  minAvailable: {{ .Values.innspireWebsite.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.innspireWebsite.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.innspireWebsite.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "innspire.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "innspirewebsite"
+{{- end }}
