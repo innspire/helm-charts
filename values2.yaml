@@ -1,0 +1,98 @@
+fullnameOverride: ""
+nameOverride: ""
+
+global:
+  imagePullSecrets: []
+  podSecurityContext: {}
+  securityContext: {}
+  pullPolicy: Always
+
+innspire:
+  # Trace, Debug, Information, Warning, Error, Critical, None
+  logLevel: "Information"
+
+
+innspireWebsite:
+  enabled: true
+  image:
+    repository: ghcr.io/innspire/innspirewebsite
+    tag: "latest"
+  ingress:
+    enabled: true
+    hosts:
+    - innspire.local.dev
+  replicaCount: 2
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+  resources: {}
+  pdb:
+    create: true
+    minAvailable: 1
+    maxUnavailabe: ""
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  probes:
+    enabled: false
+  logLevel: "Information"
+
+innspireWebAPI:
+  enabled: true
+  image:
+    repository: ghcr.io/innspire/innspirewebapi
+    tag: "latest"
+  ingress:
+    enabled: true
+    hosts:
+    - innspire-api.local.dev
+  replicaCount: 2
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+  resources: {}
+  pdb:
+    create: true
+    minAvailable: 1
+    maxUnavailabe: ""
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  probes:
+    enabled: true
+  logLevel: "Information"
+  apiUrl: https://innspire-api.local.dev
+  apiHostname: innspire-api.local.dev
+  jwtSecret: ""
+  jwtTokenExpiry: 10080
+
+innspireAdminConsole:
+  enabled: true
+  image:
+    repository: ghcr.io/innspire/innspireadminconsole
+    tag: "latest"
+  ingress:
+    enabled: true
+    hosts:
+    - innspire-admin.local.dev
+  replicaCount: 2
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+  resources: {}
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailabe: ""
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  probes:
+    enabled: true
+  apiUrl: https://innspire-api.local.dev
