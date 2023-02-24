@@ -1,0 +1,30 @@
+{{- if .Values.innspireWebAPI.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspirewebapi
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspirewebapi"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "innspire.fullname" . }}-innspirewebapi
+  minReplicas: {{ .Values.innspireWebAPI.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.innspireWebAPI.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.innspireWebAPI.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.innspireWebAPI.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.innspireWebAPI.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.innspireWebAPI.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

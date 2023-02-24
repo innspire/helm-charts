@@ -1,0 +1,100 @@
+{{- if .Values.innspireWebAPI.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspirewebapi
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspirewebapi"
+spec:
+  {{- if not .Values.innspireWebAPI.autoscaling.enabled }}
+  replicas: {{ .Values.innspireWebAPI.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "innspire.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "innspirewebapi"
+  template:
+    metadata:
+      labels:
+        {{- include "innspire.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: "innspirewebapi"
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.global.podSecurityContext | nindent 8 }}
+      containers:
+        - name: innspirewebapi
+          securityContext:
+            {{- toYaml .Values.global.securityContext | nindent 12 }}
+          image: "{{ .Values.innspireWebAPI.image.repository }}:{{ .Values.innspireWebAPI.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.global.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: health
+              containerPort: 8081
+              protocol: TCP
+            - name: metrics
+              containerPort: 9123
+              protocol: TCP
+          {{- if .Values.innspireWebAPI.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: health
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: health
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          {{- end }}
+          resources:
+            {{- toYaml .Values.innspireWebAPI.resources | nindent 12 }}
+          env:
+            - name: LOGLEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspirewebapi
+                  key: LOGLEVEL
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspirewebapi
+                  key: API_URL
+            - name: API_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspirewebapi
+                  key: API_HOSTNAME
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspirewebapi
+                  key: JWT_SECRET
+            - name: POSTGRES_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspirewebapi
+                  key: POSTGRES_URI
+      {{- with .Values.innspireWebAPI.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.innspireWebAPI.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.innspireWebAPI.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

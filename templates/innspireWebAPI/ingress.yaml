@@ -1,0 +1,25 @@
+{{- if .Values.innspireWebAPI.ingress.enabled -}}
+{{- $fullName := include "innspire.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspirewebapi
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspirewebapi"
+spec:
+  rules:
+    {{- range .Values.innspireWebAPI.ingress.hosts }}
+    - host: "{{ toYaml . }}"
+      http:
+        paths:
+        - backend:
+            service:
+              name: {{ $fullName }}-innspirewebapi
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    {{- end }}
+{{- end }}
