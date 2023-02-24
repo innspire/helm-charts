@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "innspire.fullname" . }}-innspireWebsite
+  name: {{ include "innspire.fullname" . }}-innspirewebsite
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "innspire.labels" . | nindent 4 }}
@@ -11,7 +11,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "innspire.fullname" . }}-innspireWebsite
+    name: {{ include "innspire.fullname" . }}-innspirewebsite
   minReplicas: {{ .Values.innspireWebsite.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.innspireWebsite.autoscaling.maxReplicas }}
   metrics:
