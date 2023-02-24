@@ -7,8 +7,6 @@ global:
   securityContext: {}
 
 innspire:
-  # Will be generated if not provided.
-  apiSecret: ""
   # Trace, Debug, Information, Warning, Error, Critical, None
   logLevel: "Information"
 
