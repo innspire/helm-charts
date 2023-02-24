@@ -68,3 +68,4 @@ innspireWebAPI:
   apiUrl: https://api.example.com
   apiHostname: api.example.com
   jwtSecret: ""
+  jwtTokenExpiry: 10080

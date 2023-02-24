@@ -10,3 +10,4 @@ data:
   LOGLEVEL: {{ .Values.innspireWebAPI.logLevel }}
   API_URL: {{ .Values.innspireWebAPI.apiUrl }}
   API_HOSTNAME: {{ .Values.innspireWebAPI.apiHostname }}
+  JWT_TOKEN_EXPIRY: {{ .Values.innspireWebAPI.jwtTokenExpiry | quote }}
