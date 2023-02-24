@@ -1,0 +1,25 @@
+{{- if .Values.innspireAdminConsole.ingress.enabled -}}
+{{- $fullName := include "innspire.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspireadminconsole"
+spec:
+  rules:
+    {{- range .Values.innspireAdminConsole.ingress.hosts }}
+    - host: "{{ toYaml . }}"
+      http:
+        paths:
+        - backend:
+            service:
+              name: {{ $fullName }}-innspireadminconsole
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    {{- end }}
+{{- end }}

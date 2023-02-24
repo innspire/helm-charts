@@ -1,0 +1,21 @@
+{{- if .Values.innspireAdminConsole.pdb.create }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspireadminconsole"
+spec:
+  {{- if .Values.innspireAdminConsole.pdb.minAvailable }}
+  minAvailable: {{ .Values.innspireAdminConsole.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.innspireAdminConsole.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.innspireAdminConsole.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "innspire.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "innspireadminconsole"
+{{- end }}

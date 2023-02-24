@@ -1,0 +1,30 @@
+{{- if .Values.innspireAdminConsole.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspireadminconsole"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  minReplicas: {{ .Values.innspireAdminConsole.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.innspireAdminConsole.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.innspireAdminConsole.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.innspireAdminConsole.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.innspireAdminConsole.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.innspireAdminConsole.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

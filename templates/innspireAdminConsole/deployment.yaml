@@ -1,0 +1,74 @@
+{{- if .Values.innspireAdminConsole.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspireadminconsole"
+spec:
+  {{- if not .Values.innspireAdminConsole.autoscaling.enabled }}
+  replicas: {{ .Values.innspireAdminConsole.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "innspire.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: "innspireadminconsole"
+  template:
+    metadata:
+      labels:
+        {{- include "innspire.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: "innspireadminconsole"
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.global.podSecurityContext | nindent 8 }}
+      containers:
+        - name: innspireadminconsole
+          securityContext:
+            {{- toYaml .Values.global.securityContext | nindent 12 }}
+          image: "{{ .Values.innspireAdminConsole.image.repository }}:{{ .Values.innspireAdminConsole.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.global.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- if .Values.innspireAdminConsole.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          {{- end }}
+          resources:
+            {{- toYaml .Values.innspireAdminConsole.resources | nindent 12 }}
+          env:
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+                  key: API_URL
+      {{- with .Values.innspireAdminConsole.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.innspireAdminConsole.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.innspireAdminConsole.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

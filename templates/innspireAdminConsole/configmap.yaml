@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "innspire.fullname" . }}-innspireadminconsole
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "innspire.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "innspireadminconsole"
+data:
+  API_URL: {{ .Values.innspireAdminConsole.apiUrl }}
