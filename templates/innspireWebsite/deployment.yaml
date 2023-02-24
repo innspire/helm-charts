@@ -70,11 +70,6 @@ spec:
                 configMapKeyRef:
                   name: {{ include "innspire.fullname" . }}-innspirewebsite
                   key: API_URL
-            - name: API_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "innspire.fullname" . }}-innspire-api-secret
-                  key: API_SECRET
       {{- with .Values.innspireWebsite.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
