@@ -5,6 +5,7 @@ global:
   imagePullSecrets: []
   podSecurityContext: {}
   securityContext: {}
+  pullPolicy: IfNotPresent
 
 innspire:
   # Trace, Debug, Information, Warning, Error, Critical, None
@@ -15,7 +16,6 @@ innspireWebsite:
   enabled: true
   image:
     repository: ghcr.io/innspire/innspirewebsite
-    pullPolicy: IfNotPresent
     tag: "latest"
   ingress:
     enabled: false
@@ -43,7 +43,6 @@ innspireWebAPI:
   enabled: true
   image:
     repository: ghcr.io/innspire/innspirewebapi
-    pullPolicy: IfNotPresent
     tag: "latest"
   ingress:
     enabled: false
