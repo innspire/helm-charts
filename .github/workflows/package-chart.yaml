@@ -25,4 +25,4 @@ jobs:
         run: |
           version=$(pybump get --file ./Chart.yaml)
           helm package . --version $version
-          helm push innspire-$version.tgz ghcr.io/innspire 
+          helm push innspire-$version.tgz oci://ghcr.io/innspire 
