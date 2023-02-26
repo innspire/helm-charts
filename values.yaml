@@ -7,11 +7,6 @@ global:
   securityContext: {}
   pullPolicy: IfNotPresent
 
-innspire:
-  # Trace, Debug, Information, Warning, Error, Critical, None
-  logLevel: "Information"
-
-
 innspireWebsite:
   enabled: true
   image:
