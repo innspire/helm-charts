@@ -1,10 +1,10 @@
-name: docker-build-main
+name: helm-build-main
 on:
   push:
     branches: [ "main" ]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       packages: write
       contents: read
@@ -25,4 +25,4 @@ jobs:
         run: |
           version=$(pybump get --file ./Chart.yaml)
           helm package . --version $version
-          helm push innspire-$version.tgz oci://ghcr.io/innspire 
+          helm push innspire-helm-$version.tgz oci://ghcr.io/innspire

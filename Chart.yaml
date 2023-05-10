@@ -1,5 +1,5 @@
 apiVersion: v2
-name: innspire #TODO
+name: innspire-helm #TODO
 version: 0.1.0
 description: Helm Chart for the Innspire Stack
 type: application
