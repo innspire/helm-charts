@@ -64,6 +64,7 @@ innspireWebAPI:
   apiHostname: api.example.com
   jwtSecret: ""
   jwtTokenExpiry: 10080
+  postgresUri: ""
 
 innspireAdminConsole:
   enabled: true
